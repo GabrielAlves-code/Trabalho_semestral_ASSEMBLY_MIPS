@@ -1,0 +1,59 @@
+.data
+	msg1: .asciiz "\n insira um valor entre 2 e 34(inteiro): "
+	msg2: .asciiz "\n INSIRA UM VALOR VALIDO! "
+.text
+.globl inicio
+	#Input inicial
+	inicio:  
+	li $v0, 4
+	la $a0, msg1 #Escreva("Insira um valor entre 2 e 34(inteiro)")
+	syscall 
+	li $v0, 5 #ler N
+	syscall
+	ble $v0, 2, erro #se N <= 2 ` escreva ("INISRA UM VALOR VALIDO")
+	bge $v0, 34, erro #se N > 34 ` escreva ("INSIRA UM VALOR VALIDO")
+	add $t0, $v0, $zero #Copia o Valor de N ao $v0 
+	li $t1, 0 #a = 0, primeiro numero da sequência
+	li $t2, 1 #b = 1, Segundo numero da sequência 
+	add $t5, $t5, 2 # Como o Primeiro e o Segundo numero ja foram considerados, o Contador começa em 2
+	j enquanto 
+	
+	erro:
+	li $v0, 4
+	la $a0, msg2 #Mensagem de erro 
+	syscall
+	j inicio 
+	
+	
+	
+	
+	
+	enquanto: 
+	add $t5, $t5, 1 # soma acumulada para o contador 
+	add $t3, $t1, $t2 # c = a + b
+	sub $t6, $t3, $t2 # sub = c - b
+	move $t1, $t2 # a = b
+	move $t2 , $t3 # b = c
+	# bgt $t3, $v0, fim  caso seja até o ultimo numero ultrapassar n
+	beq $t5, $t0, fim # se o contador alcançar N o programa termina 
+	
+	rem $t7, $t6, 2 # sobra = sub % 2
+	beq $t7, 0, se # se sobra = 0 então: (pula para o label se) 
+	
+	j enquanto
+	
+	se:
+	move $t8, $t6 # move o sobra para uma segunda 'variavel' para impressão 
+	move $a0, $t8 # move o valor da segunda 'variavel' para o registrador 
+	li $v0, 1 # executa a impressao de um numero inteiro, nesse caso, ele esta em $a0
+	syscall 
+	j enquanto # volta para o label enquanto 
+	
+	
+	
+	
+	
+	fim: 
+	li $v0, 10 # encerra programa 
+	syscall
+	
