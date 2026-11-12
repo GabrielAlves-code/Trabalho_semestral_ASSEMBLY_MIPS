@@ -1,6 +1,7 @@
 .data
 	msg1: .asciiz "\n insira um valor entre 2 e 34(inteiro): "
 	msg2: .asciiz "\n INSIRA UM VALOR VALIDO! "
+	msg3: .asciiz "\n"
 .text
 .globl inicio
 	#Input inicial
@@ -15,6 +16,7 @@
 	add $t0, $v0, $zero #Copia o Valor de N ao $v0 
 	li $t1, 0 #a = 0, primeiro numero da sequência
 	li $t2, 1 #b = 1, Segundo numero da sequência 
+	li $t5, 0
 	add $t5, $t5, 2 # Como o Primeiro e o Segundo numero ja foram considerados, o Contador começa em 2
 	j enquanto 
 	
@@ -47,6 +49,9 @@
 	move $a0, $t8 # move o valor da segunda 'variavel' para o registrador 
 	li $v0, 1 # executa a impressao de um numero inteiro, nesse caso, ele esta em $a0
 	syscall 
+	li $v0, 4
+	la $a0, msg3 
+	syscall
 	j enquanto # volta para o label enquanto 
 	
 	
